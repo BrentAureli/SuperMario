@@ -13,8 +13,8 @@ big_mario
 little_mario
   rotate: false
   xy: 1, 1
-  size: 220, 16
-  orig: 220, 16
+  size: 224, 16
+  orig: 224, 16
   offset: 0, 0
   index: -1
 turtle
@@ -26,7 +26,7 @@ turtle
   index: -1
 goomba
   rotate: false
-  xy: 223, 1
+  xy: 227, 1
   size: 48, 16
   orig: 48, 16
   offset: 0, 0
