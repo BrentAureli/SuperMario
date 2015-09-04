@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
@@ -66,7 +70,7 @@ public class MarioTest extends Sprite {
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getRegion(dt));
-        Gdx.app.log("StateTimer", "" + stateTimer);
+//        Gdx.app.log("StateTimer", "" + stateTimer);
 
     }
 
@@ -128,8 +132,17 @@ public class MarioTest extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioBros.PPM);
+        shape.setPosition(new Vector2(0, -1 / MarioBros.PPM));
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
+
+        //PolygonShape headSensor = new PolygonShape();
+        EdgeShape headSensor = new EdgeShape();
+        headSensor.set(new Vector2(-2 / MarioBros.PPM, 6 / MarioBros.PPM), new Vector2(2 / MarioBros.PPM, 6 / MarioBros.PPM));
+        fdef.shape = headSensor;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData("head");
     }
 }

@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
 import com.brentaureli.mariobros.Sprites.Mario;
-import com.brentaureli.mariobros.Sprites.MarioTest;
 import com.brentaureli.mariobros.Tools.B2WorldCreator;
+import com.brentaureli.mariobros.Tools.WorldContactListener;
 
 /**
  * Created by brentaureli on 8/14/15.
@@ -41,7 +41,6 @@ public class PlayScreen implements Screen{
     //Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
-
 
     //sprites
     private Mario player;
@@ -77,6 +76,8 @@ public class PlayScreen implements Screen{
 
         //create mario in our game world
         player = new Mario(world, this);
+
+        world.setContactListener(new WorldContactListener());
     }
 
     public TextureAtlas getAtlas(){
