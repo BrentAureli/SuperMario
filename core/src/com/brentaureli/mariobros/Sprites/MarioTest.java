@@ -1,56 +1,122 @@
 package com.brentaureli.mariobros.Sprites;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
+import com.brentaureli.mariobros.Screens.PlayScreen;
 
 /**
- * Created by brentaureli on 8/29/15.
+ * Created by brentaureli on 9/3/15.
  */
-public class MarioTest extends Sprite{
+public class MarioTest extends Sprite {
+    public enum State { STANDING, JUMPING, RUNNING, FALLING };
+    public State currentState;
+    public State previousState;
+
+    public float stateTimer;
     public World world;
     public Body b2body;
-    public Animation animation;
-    public TextureRegion keyFrame;
-    Texture run;
-    float stateTime;
-    TextureRegion marioStand;
-    boolean faceLeft;
-    boolean jumping;
-    public Animation jumpAnimation;
-    float jumpStateTime;
 
-    public MarioTest(World world){
-        super(new TextureRegion(new Texture("mario_all.png")));
-        TextureAtlas ta = new TextureAtlas("test2.pack");
+    //state regions
+    private TextureRegion marioStand;
+    private Animation marioJump;
+    private Animation marioRun;
 
-        marioStand = new TextureRegion(ta.findRegion("little_mario"), 0, 0, 16, 16);
-//        run = new Texture("mario_run.png");
-        Array<TextureRegion> runAnimation = new Array<TextureRegion>();
-        for(int i = 1; i < 4; i++){
-            runAnimation.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
-        }
-        animation = new Animation(0.1f, runAnimation);
-        jumpAnimation = new Animation(0.1f, new TextureRegion(getTexture(), 64, 0, 16, 16), new TextureRegion(getTexture(), 80, 0, 16, 16));
+    private boolean runningRight;
+
+    public MarioTest(World world, PlayScreen screen){
+        super(screen.getAtlas().findRegion("little_mario"));
         this.world = world;
         defineMario();
-        setBounds(32 / MarioBros.PPM, 32 / MarioBros.PPM, 16 / MarioBros.PPM, 16 / MarioBros.PPM);
-        faceLeft = false;
+        marioStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
 
-        jumpStateTime = 0;
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        //define run animation
+        for(int i = 1; i < 4; i++)
+            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
+        marioRun = new Animation(0.1f, frames);
+
+        //clear frames for next animation
+        frames.clear();
+
+        //define jump animation
+        for(int i = 4; i < 6; i++)
+            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
+        marioJump = new Animation(0.1f, frames);
+
+
+        setBounds(0, 0, 16 / MarioBros.PPM, 16 / MarioBros.PPM);
+        setRegion(marioStand);
+        currentState = State.STANDING;
+        previousState = State.STANDING;
+        runningRight = true;
+        stateTimer = 0;
+
+    }
+
+    public void update(float dt){
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getRegion(dt));
+        Gdx.app.log("StateTimer", "" + stateTimer);
+
+    }
+
+    public TextureRegion getRegion(float dt){
+        TextureRegion region;
+        currentState = getState();
+
+
+        //get the appropriate region
+        switch (currentState){
+            case JUMPING:
+                region = marioJump.getKeyFrame(stateTimer);
+                break;
+            case RUNNING:
+                region = marioRun.getKeyFrame(stateTimer, true);
+                break;
+            case FALLING:
+            case STANDING:
+            default:
+                region = marioStand;
+                break;
+        }
+
+        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = false;
+        }
+        else if((b2body.getLinearVelocity().x > 0 || runningRight ) && region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = true;
+        }
+
+
+        stateTimer = currentState == previousState ? stateTimer + dt : 0;
+        previousState = currentState;
+        return region;
+
+
+    }
+
+    public State getState(){
+        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING) )
+            return State.JUMPING;
+        else if(b2body.getLinearVelocity().y < 0)
+            return State.FALLING;
+        else if(b2body.getLinearVelocity().x != 0)
+            return State.RUNNING;
+        else
+            return State.STANDING;
+
     }
 
     public void defineMario(){
@@ -62,49 +128,8 @@ public class MarioTest extends Sprite{
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioBros.PPM);
+
         fdef.shape = shape;
         b2body.createFixture(fdef);
-
     }
-
-    public void update(float dt){
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        stateTime += dt;
-        if(b2body.getLinearVelocity().y > 0) {
-            jumping = true;
-            jumpStateTime += dt;
-        }
-        if(b2body.getLinearVelocity().y == 0) {
-            jumping = false;
-            jumpStateTime = 0;
-        }
-
-
-        keyFrame = animation.getKeyFrame(stateTime, true);
-        if(jumping){
-            keyFrame = jumpAnimation.getKeyFrame(jumpStateTime, false);
-        }
-        if(!keyFrame.isFlipX() && b2body.getLinearVelocity().x < 0) {
-            keyFrame.flip(true, false);
-            faceLeft = true;
-        }
-        if(keyFrame.isFlipX() && b2body.getLinearVelocity().x > 0) {
-            keyFrame.flip(true, false);
-            faceLeft = false;
-        }
-
-
-
-        else if(b2body.getLinearVelocity().x == 0) {
-            if((faceLeft && !marioStand.isFlipX()) || (!faceLeft && marioStand.isFlipX()))
-                marioStand.flip(true, false);
-
-            setRegion(marioStand);
-        }
-        else
-            setRegion(keyFrame);
-
-    }
-
-
 }
