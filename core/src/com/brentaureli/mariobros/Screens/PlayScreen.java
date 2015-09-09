@@ -27,6 +27,7 @@ public class PlayScreen implements Screen{
     //Reference to our Game, used to set Screens
     private MarioBros game;
     private TextureAtlas atlas;
+    public static boolean alreadyDestroyed = false;
 
     //basic playscreen variables
     private OrthographicCamera gamecam;
@@ -109,6 +110,7 @@ public class PlayScreen implements Screen{
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
+        hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
         gamecam.position.x = player.b2body.getPosition().x;
