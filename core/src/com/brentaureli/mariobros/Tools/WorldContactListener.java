@@ -5,8 +5,6 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.brentaureli.mariobros.Scenes.Hud;
-import com.brentaureli.mariobros.Screens.PlayScreen;
 import com.brentaureli.mariobros.Sprites.InteractiveTileObject;
 
 /**
@@ -17,7 +15,8 @@ public class WorldContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
-
+        //Gdx.app.log("Collision", MarioBros.bitToText(fixA.getFilterData().categoryBits) + " collides with " + MarioBros.bitToText(fixB.getFilterData().categoryBits));
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
         if(fixA.getUserData() == "head" || fixB.getUserData() == "head"){
             Fixture head = fixA.getUserData() == "head" ? fixA : fixB;
             Fixture object = head == fixA ? fixB : fixA;
@@ -25,7 +24,6 @@ public class WorldContactListener implements ContactListener {
             if(object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())){
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
             }
-
         }
     }
 

@@ -3,6 +3,7 @@ package com.brentaureli.mariobros.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
+import com.brentaureli.mariobros.Sprites.Goomba;
 import com.brentaureli.mariobros.Sprites.Mario;
 import com.brentaureli.mariobros.Tools.B2WorldCreator;
 import com.brentaureli.mariobros.Tools.WorldContactListener;
@@ -45,9 +47,13 @@ public class PlayScreen implements Screen{
 
     //sprites
     private Mario player;
+    private Goomba goomba;
+
+    private Music music;
 
 
     public PlayScreen(MarioBros game){
+        MarioBros.manager.get("audio/music/mario_music.ogg", Music.class).play();
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
@@ -73,12 +79,19 @@ public class PlayScreen implements Screen{
         //allows for debug lines of our box2d world.
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map);
+        new B2WorldCreator(this);
 
         //create mario in our game world
-        player = new Mario(world, this);
+        player = new Mario(this);
 
         world.setContactListener(new WorldContactListener());
+
+        music = MarioBros.manager.get("audio/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
+
+        goomba = new Goomba(this, .32f, .32f);
+
     }
 
     public TextureAtlas getAtlas(){
@@ -110,6 +123,7 @@ public class PlayScreen implements Screen{
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
+        goomba.update(dt);
         hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
@@ -119,6 +133,7 @@ public class PlayScreen implements Screen{
         gamecam.update();
         //tell our renderer to draw only what our camera can see in our game world.
         renderer.setView(gamecam);
+
     }
 
     @Override
@@ -126,11 +141,9 @@ public class PlayScreen implements Screen{
         //separate our update logic from render
         update(delta);
 
-
         //Clear the game screen with Black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         //render our game map
         renderer.render();
@@ -141,6 +154,7 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        goomba.draw(game.batch);
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.
@@ -154,6 +168,13 @@ public class PlayScreen implements Screen{
         //updated our game viewport
         gamePort.update(width,height);
 
+    }
+
+    public TiledMap getMap(){
+        return map;
+    }
+    public World getWorld(){
+        return world;
     }
 
     @Override
@@ -179,6 +200,6 @@ public class PlayScreen implements Screen{
         world.dispose();
         b2dr.dispose();
         hud.dispose();
-
     }
+
 }
