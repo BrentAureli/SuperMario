@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="121">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="139">
  <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
@@ -118,7 +118,7 @@
  </layer>
  <layer name="Graphic Layer" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJztl89OwzAMxtPdgG0IOO2aI7AhAQNpb8aDAGdeAtjb4Woz86w4f5Z07SJX/LQodZLPbr6GrkfGrBVFqRp6STHvwAfwmbEOzpE7T87aueueeg6qf8OsOW7uOfDL1Re6vmHMD/AbUVeptjiHb56u9kNIfw05qP54Vk26/r7gZ6vrvKW+jonz1bXU3sjdD4fOd6o5qP540L+l91AX+M7fUJv+YnsmeLhG2pR9SLE5NUodK+nBe7Mtrvu1Yc2GUNzqhP5/pnCfSr52+Zi3FWVIWFOnf2MvGott1/i+81EUjjX1+ldRasaacv4dmx1955UL/w6Dv//vqC6/p86gtudN3FmfEhtLifyksSNhXlprqR0zf8qaiDXudghrDh/LtR1ab9TACY2T/DuBsVPgMnM/4b7MmWNofG0J5XYL9+6IJ68TYoeKL4c+sQ4PWkctuX7r8Io0tmvtLkL6Xf5tz9w5IecMxn3Z9/NN2Xex75xQbtSTV/D7CNwI8SH/DsE3oRxKPoMUrMeDtI/rt4JXXH1Uf+6ZRMdzDZImqf4u/063Z+/C7Nqpz+AC4sbA5Mj+XcJaL4TXxr/vliQO+2LfOTRuydZsL7yP6z95dGBsCf0lasfni8mh5DOIhe93XJP3c/0+r/B+rp/vj1T9ON6lQdJE9T+zd5Dk3wfi37fAM+DcQ8wcWBTwb2sHZZ9StdE6l6+pss8fuoxEkw==
+   eJztl01OwzAQhd2wAtoiYNWtl0CLBBSk3oyDAGsuAeRs2TBRO8p08PgndpomWOqnOM7Yfh77xU1ZKFXuOFFNOZPJDAvuX7yvr1XRQOspb1D3DnxEaMA+YvuJGTt23KHPIevfspgcdu4xoC/Ro1jH6+k9ra/LX3D9Bn488irlFvuw9dPVfnDpH8Mcsn5/NpNw/X1Bz1V6j16WPEuhbW1rk3JvxO6Htv0NdQ5Zvz/o39R7qAu4f8vir39pHfd3xfpa/KNvafhZkWJjchTaVtKDzxY7TM/HhlZbXHGbAf5/pmep9N3b9vzNZPpGq/H613RfMUpDWYrLZI4Jrcbr30xmzGiVzr9T1dD3vGLh32EF+Y7q8nvqFHJ7BiiP/kNifUkxP6ltIfRLcy2VffoPGRPRylx2oVX7tlxb23yjBo6rneTfGbSdAxeR+wn3ZUwfx0b93/vTY2438OyWePIqIPZYsc2hT7TBg9qQS65fG7wite1auwmXfpN/6zN3SYg5g3Ff9r2+IfvO953jmhv15CVcH4BrId7l32PwjWsOKdcgBG3xIK3j+rXgFVMd1R97JtH2XIOkScq/yb/z3dm7Uk05dA3OIW4KzA7s3zWM9Ux4mdj33ZrEYZ3vO4fGrdmYFXmO4z9adGBsCv0pcsf785lDyjXwhe93HJPXc/02r/B6rp/vj1D92N6kQdJE9T+xd5Dk33vi31fHGnDuIGYJrBL4tz6WMvukyk3Oc/qcZvb5BRdfbQI=
   </data>
  </layer>
  <objectgroup name="Ground">
@@ -212,5 +212,13 @@
   <object id="115" x="352" y="128" width="16" height="16"/>
   <object id="116" x="320" y="128" width="16" height="16"/>
   <object id="119" x="1904" y="128" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="Goomba">
+  <object id="121" x="192" y="176" width="16" height="16"/>
+  <object id="122" x="528" y="176" width="16" height="16"/>
+  <object id="128" x="304" y="176" width="16" height="16"/>
+  <object id="134" x="672" y="176" width="16" height="16"/>
+  <object id="135" x="816" y="176" width="16" height="16"/>
+  <object id="138" x="864" y="176" width="16" height="16"/>
  </objectgroup>
 </map>
