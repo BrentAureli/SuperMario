@@ -31,3 +31,10 @@ goomba
   orig: 48, 16
   offset: 0, 0
   index: -1
+mushroom
+  rotate: false
+  xy: 437, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
