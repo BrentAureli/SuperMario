@@ -1,14 +1,7 @@
-package com.brentaureli.mariobros.Sprites;
+package com.brentaureli.mariobros.Sprites.TileObjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
 import com.brentaureli.mariobros.Screens.PlayScreen;
@@ -29,7 +22,6 @@ public class Brick extends InteractiveTileObject {
         getCell().setTile(null);
         Hud.addScore(200);
         MarioBros.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
-
     }
 
 }

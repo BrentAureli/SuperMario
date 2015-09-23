@@ -13,14 +13,21 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
-import com.brentaureli.mariobros.Sprites.Goomba;
+import com.brentaureli.mariobros.Sprites.Enemies.Enemy;
+import com.brentaureli.mariobros.Sprites.Items.Item;
+import com.brentaureli.mariobros.Sprites.Items.Mushroom;
 import com.brentaureli.mariobros.Sprites.Mario;
+import com.brentaureli.mariobros.Sprites.TileObjects.Coin;
 import com.brentaureli.mariobros.Tools.B2WorldCreator;
 import com.brentaureli.mariobros.Tools.WorldContactListener;
+
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by brentaureli on 8/14/15.
@@ -44,16 +51,15 @@ public class PlayScreen implements Screen{
     //Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
 
     //sprites
     private Mario player;
-    private Goomba goomba;
 
     private Music music;
 
 
     public PlayScreen(MarioBros game){
-        MarioBros.manager.get("audio/music/mario_music.ogg", Music.class).play();
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
@@ -79,7 +85,7 @@ public class PlayScreen implements Screen{
         //allows for debug lines of our box2d world.
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(this);
+        creator = new B2WorldCreator(this);
 
         //create mario in our game world
         player = new Mario(this);
@@ -90,9 +96,8 @@ public class PlayScreen implements Screen{
         music.setLooping(true);
         music.play();
 
-        goomba = new Goomba(this, .32f, .32f);
-
     }
+
 
     public TextureAtlas getAtlas(){
         return atlas;
@@ -123,7 +128,8 @@ public class PlayScreen implements Screen{
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
-        goomba.update(dt);
+        for(Enemy enemy : creator.getGoombas())
+            enemy.update(dt);
         hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
@@ -154,7 +160,8 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        goomba.draw(game.batch);
+        for(Enemy enemy : creator.getGoombas())
+            enemy.draw(game.batch);
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.
