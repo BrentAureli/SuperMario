@@ -128,8 +128,12 @@ public class PlayScreen implements Screen{
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
-        for(Enemy enemy : creator.getGoombas())
+        for(Enemy enemy : creator.getGoombas()) {
             enemy.update(dt);
+            if(enemy.getX() < player.getX() + 224 / MarioBros.PPM)
+                enemy.b2body.setActive(true);
+        }
+
         hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
