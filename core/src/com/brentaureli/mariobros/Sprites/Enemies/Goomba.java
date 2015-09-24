@@ -6,13 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Screens.PlayScreen;
-import com.brentaureli.mariobros.Sprites.Items.Mushroom;
 
 /**
  * Created by brentaureli on 9/14/15.

@@ -20,14 +20,13 @@ import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
 import com.brentaureli.mariobros.Sprites.Enemies.Enemy;
 import com.brentaureli.mariobros.Sprites.Items.Item;
+import com.brentaureli.mariobros.Sprites.Items.ItemDef;
 import com.brentaureli.mariobros.Sprites.Items.Mushroom;
 import com.brentaureli.mariobros.Sprites.Mario;
-import com.brentaureli.mariobros.Sprites.TileObjects.Coin;
 import com.brentaureli.mariobros.Tools.B2WorldCreator;
 import com.brentaureli.mariobros.Tools.WorldContactListener;
 
-import java.util.Queue;
-import java.util.Stack;
+import java.util.PriorityQueue;
 
 /**
  * Created by brentaureli on 8/14/15.
@@ -57,6 +56,9 @@ public class PlayScreen implements Screen{
     private Mario player;
 
     private Music music;
+
+    private Array<Item> items;
+    private PriorityQueue<ItemDef> itemsToSpawn;
 
 
     public PlayScreen(MarioBros game){
@@ -94,8 +96,24 @@ public class PlayScreen implements Screen{
 
         music = MarioBros.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.play();
+        //music.play();
 
+        items = new Array<Item>();
+        itemsToSpawn = new PriorityQueue<ItemDef>();
+    }
+
+    public void spawnItem(ItemDef idef){
+        itemsToSpawn.add(idef);
+    }
+
+
+    public void handleSpawningItems(){
+        if(!itemsToSpawn.isEmpty()){
+            ItemDef idef = itemsToSpawn.poll();
+            if(idef.type == Mushroom.class){
+                items.add(new Mushroom(this, idef.position.x, idef.position.y));
+            }
+        }
     }
 
 
@@ -123,6 +141,7 @@ public class PlayScreen implements Screen{
     public void update(float dt){
         //handle user input first
         handleInput(dt);
+        handleSpawningItems();
 
         //takes 1 step in the physics simulation(60 times per second)
         world.step(1 / 60f, 6, 2);
@@ -133,6 +152,9 @@ public class PlayScreen implements Screen{
             if(enemy.getX() < player.getX() + 224 / MarioBros.PPM)
                 enemy.b2body.setActive(true);
         }
+
+        for(Item item : items)
+            item.update(dt);
 
         hud.update(dt);
 
@@ -166,6 +188,8 @@ public class PlayScreen implements Screen{
         player.draw(game.batch);
         for(Enemy enemy : creator.getGoombas())
             enemy.draw(game.batch);
+        for(Item item : items)
+            item.draw(game.batch);
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.

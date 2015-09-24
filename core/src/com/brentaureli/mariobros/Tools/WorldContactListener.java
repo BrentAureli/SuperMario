@@ -8,8 +8,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Sprites.Enemies.Enemy;
-import com.brentaureli.mariobros.Sprites.Items.Item;
-import com.brentaureli.mariobros.Sprites.Mario;
 import com.brentaureli.mariobros.Sprites.TileObjects.InteractiveTileObject;
 
 /**
