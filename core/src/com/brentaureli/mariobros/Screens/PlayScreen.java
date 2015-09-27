@@ -27,6 +27,7 @@ import com.brentaureli.mariobros.Tools.B2WorldCreator;
 import com.brentaureli.mariobros.Tools.WorldContactListener;
 
 import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by brentaureli on 8/14/15.
@@ -58,7 +59,7 @@ public class PlayScreen implements Screen{
     private Music music;
 
     private Array<Item> items;
-    private PriorityQueue<ItemDef> itemsToSpawn;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
 
     public PlayScreen(MarioBros game){
@@ -96,10 +97,10 @@ public class PlayScreen implements Screen{
 
         music = MarioBros.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        //music.play();
+        music.play();
 
         items = new Array<Item>();
-        itemsToSpawn = new PriorityQueue<ItemDef>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
     }
 
     public void spawnItem(ItemDef idef){

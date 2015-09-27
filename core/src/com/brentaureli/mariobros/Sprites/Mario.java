@@ -29,6 +29,11 @@ public class Mario extends Sprite {
     private float stateTimer;
     private boolean runningRight;
 
+    private Animation marioGrow;
+    private Animation bigMarioRun;
+    private TextureRegion bigMarioJump;
+    private TextureRegion bigMarioStand;
+
     public Mario(PlayScreen screen){
         super(screen.getAtlas().findRegion("little_mario"));
 
@@ -53,6 +58,22 @@ public class Mario extends Sprite {
         for(int i = 4; i < 6; i++)
             frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
         marioJump = new Animation(0.1f, frames);
+
+        //delete later
+        frames.clear();
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
+        marioGrow = new Animation(0.2f, frames);
+        frames.clear();
+        for(int i = 1; i < 4; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), i*16, 0, 16, 32));
+        bigMarioRun = new Animation(0.1f, frames);
+        bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
+        bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
+
+
 
         //create texture region for mario standing
         marioStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
@@ -149,7 +170,8 @@ public class Mario extends Sprite {
                 MarioBros.BRICK_BIT |
                 MarioBros.ENEMY_BIT |
                 MarioBros.OBJECT_BIT |
-                MarioBros.ENEMY_HEAD_BIT;
+                MarioBros.ENEMY_HEAD_BIT |
+                MarioBros.ITEM_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
