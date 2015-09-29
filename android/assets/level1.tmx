@@ -164,19 +164,23 @@
   <object id="69" x="912" y="128" width="32" height="64"/>
  </objectgroup>
  <objectgroup name="Coins">
-  <object id="70" x="256" y="128" width="16" height="16">
+  <object id="70" x="256" y="128" width="16" height="16"/>
+  <object id="71" x="336" y="128" width="16" height="16">
    <properties>
     <property name="mushroom" value=""/>
    </properties>
   </object>
-  <object id="71" x="336" y="128" width="16" height="16"/>
   <object id="72" x="352" y="64" width="16" height="16"/>
   <object id="73" x="368" y="128" width="16" height="16"/>
   <object id="74" x="1264" y="128" width="16" height="16"/>
   <object id="75" x="1520" y="64" width="16" height="16"/>
   <object id="76" x="1712" y="128" width="16" height="16"/>
   <object id="77" x="1760" y="128" width="16" height="16"/>
-  <object id="78" x="1760" y="64" width="16" height="16"/>
+  <object id="78" x="1760" y="64" width="16" height="16">
+   <properties>
+    <property name="mushroom" value=""/>
+   </properties>
+  </object>
   <object id="79" x="1808" y="128" width="16" height="16"/>
   <object id="80" x="2080" y="64" width="16" height="16"/>
   <object id="81" x="2096" y="64" width="16"/>

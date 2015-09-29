@@ -1,5 +1,6 @@
 package com.brentaureli.mariobros.Sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,29 +15,33 @@ import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Screens.PlayScreen;
 
+import javax.swing.plaf.nimbus.State;
+
 /**
  * Created by brentaureli on 8/27/15.
  */
 public class Mario extends Sprite {
-    public enum State { FALLING, JUMPING, STANDING, RUNNING };
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING };
     public State currentState;
     public State previousState;
+
     public World world;
     public Body b2body;
+
     private TextureRegion marioStand;
     private Animation marioRun;
-    private Animation marioJump;
+    private TextureRegion marioJump;
+    private TextureRegion bigMarioStand;
+    private TextureRegion bigMarioJump;
+    private Animation bigMarioRun;
+    private Animation growMario;
+
     private float stateTimer;
     private boolean runningRight;
-
-    private Animation marioGrow;
-    private Animation bigMarioRun;
-    private TextureRegion bigMarioJump;
-    private TextureRegion bigMarioStand;
+    private boolean marioIsBig;
+    private boolean runGrowAnimation;
 
     public Mario(PlayScreen screen){
-        super(screen.getAtlas().findRegion("little_mario"));
-
         //initialize default values
         this.world = screen.getWorld();
         currentState = State.STANDING;
@@ -48,35 +53,32 @@ public class Mario extends Sprite {
 
         //get run animation frames and add them to marioRun Animation
         for(int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("little_mario"), i * 16, 0, 16, 16));
         marioRun = new Animation(0.1f, frames);
 
-        //clear frames for next animation sequence
         frames.clear();
+
+        for(int i = 1; i < 4; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), i * 16, 0, 16, 32));
+        bigMarioRun = new Animation(0.1f, frames);
+
+        frames.clear();
+
+        //get set animation frames from growing mario
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
+        growMario = new Animation(0.2f, frames);
+
 
         //get jump animation frames and add them to marioJump Animation
-        for(int i = 4; i < 6; i++)
-            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
-        marioJump = new Animation(0.1f, frames);
-
-        //delete later
-        frames.clear();
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
-        marioGrow = new Animation(0.2f, frames);
-        frames.clear();
-        for(int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), i*16, 0, 16, 32));
-        bigMarioRun = new Animation(0.1f, frames);
+        marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 80, 0, 16, 16);
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
-        bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
-
-
 
         //create texture region for mario standing
-        marioStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
+        marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
+        bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
 
         //define mario in Box2d
         defineMario();
@@ -95,7 +97,6 @@ public class Mario extends Sprite {
 
     }
 
-
     public TextureRegion getFrame(float dt){
         //get marios current state. ie. jumping, running, standing...
         currentState = getState();
@@ -104,16 +105,21 @@ public class Mario extends Sprite {
 
         //depending on the state, get corresponding animation keyFrame.
         switch(currentState){
+            case GROWING:
+                region = growMario.getKeyFrame(stateTimer);
+                if(growMario.isAnimationFinished(stateTimer))
+                    runGrowAnimation = false;
+                break;
             case JUMPING:
-                region = marioJump.getKeyFrame(stateTimer);
+                region = marioIsBig ? bigMarioJump : marioJump;
                 break;
             case RUNNING:
-                region = marioRun.getKeyFrame(stateTimer, true);
+                region = marioIsBig ? bigMarioRun.getKeyFrame(stateTimer, true) : marioRun.getKeyFrame(stateTimer, true);
                 break;
             case FALLING:
             case STANDING:
             default:
-                region = marioStand;
+                region = marioIsBig ? bigMarioStand : marioStand;
                 break;
         }
 
@@ -142,7 +148,9 @@ public class Mario extends Sprite {
     public State getState(){
         //Test to Box2D for velocity on the X and Y-Axis
         //if mario is going positive in Y-Axis he is jumping... or if he just jumped and is falling remain in jump state
-        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        if(runGrowAnimation)
+            return State.GROWING;
+        else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
         //if negative in Y-Axis mario is falling
         else if(b2body.getLinearVelocity().y < 0)
@@ -153,6 +161,13 @@ public class Mario extends Sprite {
         //if none of these return then he must be standing
         else
             return State.STANDING;
+    }
+
+    public void grow(){
+        runGrowAnimation = true;
+        marioIsBig = true;
+        setBounds(getX(), getY(), getWidth(), getHeight() * 2);
+        MarioBros.manager.get("audio/sounds/powerup.wav", Sound.class).play();
     }
 
     public void defineMario(){
@@ -174,7 +189,7 @@ public class Mario extends Sprite {
                 MarioBros.ITEM_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         EdgeShape head = new EdgeShape();
         head.set(new Vector2(-2 / MarioBros.PPM, 6 / MarioBros.PPM), new Vector2(2 / MarioBros.PPM, 6 / MarioBros.PPM));
