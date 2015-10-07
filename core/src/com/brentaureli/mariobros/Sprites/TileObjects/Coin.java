@@ -10,6 +10,7 @@ import com.brentaureli.mariobros.Scenes.Hud;
 import com.brentaureli.mariobros.Screens.PlayScreen;
 import com.brentaureli.mariobros.Sprites.Items.ItemDef;
 import com.brentaureli.mariobros.Sprites.Items.Mushroom;
+import com.brentaureli.mariobros.Sprites.Mario;
 
 /**
  * Created by brentaureli on 8/28/15.
@@ -26,7 +27,7 @@ public class Coin extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit() {
+    public void onHeadHit(Mario mario) {
         if(getCell().getTile().getId() == BLANK_COIN)
             MarioBros.manager.get("audio/sounds/bump.wav", Sound.class).play();
         else {

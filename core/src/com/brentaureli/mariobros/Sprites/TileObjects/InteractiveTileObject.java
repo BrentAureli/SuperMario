@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Scenes.Hud;
 import com.brentaureli.mariobros.Screens.PlayScreen;
+import com.brentaureli.mariobros.Sprites.Mario;
 
 /**
  * Created by brentaureli on 8/28/15.
@@ -53,7 +54,7 @@ public abstract class InteractiveTileObject {
 
     }
 
-    public abstract void onHeadHit();
+    public abstract void onHeadHit(Mario mario);
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
