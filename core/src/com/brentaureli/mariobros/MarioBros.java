@@ -43,6 +43,10 @@ public class MarioBros extends Game {
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
 		manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
 		manager.load("audio/sounds/powerup.wav", Sound.class);
+		manager.load("audio/sounds/powerdown.wav", Sound.class);
+		manager.load("audio/sounds/stomp.wav", Sound.class);
+		manager.load("audio/sounds/mariodie.wav", Sound.class);
+
 		manager.finishLoading();
 
 		setScreen(new PlayScreen(this));
@@ -59,26 +63,5 @@ public class MarioBros extends Game {
 	@Override
 	public void render () {
 		super.render();
-	}
-
-	public static String bitToText(short bit){
-		switch(bit){
-			case 1:
-				return "DEFAULT";
-			case 2:
-				return "MARIO";
-			case 4:
-				return "BRICK";
-			case 8:
-				return "COIN";
-			case 16:
-				return "DESTROYED";
-			case 32:
-				return "ENEMY";
-			case 64:
-				return "GROUND";
-			default:
-				return "DEFAULT";
-		}
 	}
 }
