@@ -87,7 +87,6 @@ public class Mario extends Sprite {
         bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
 
         //create dead mario texture region
-
         marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
 
         //define mario in Box2d

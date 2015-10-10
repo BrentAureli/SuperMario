@@ -34,7 +34,4 @@ public abstract class Enemy extends Sprite {
         if(y)
             velocity.y = -velocity.y;
     }
-
-
-
 }
