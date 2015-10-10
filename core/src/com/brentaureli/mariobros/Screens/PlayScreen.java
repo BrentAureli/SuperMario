@@ -131,13 +131,22 @@ public class PlayScreen implements Screen{
 
     public void handleInput(float dt){
         //control our player using immediate impulses
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        if(player.currentState != Mario.State.DEAD) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
+                player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
+                player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }
 
+    }
+
+    public void checkGameOver(){
+        if(player.currentState == Mario.State.DEAD && player.getStateTimer() > 3){
+            dispose();
+            game.setScreen(new GameOverScreen(game));
+        }
     }
 
     public void update(float dt){
@@ -151,8 +160,9 @@ public class PlayScreen implements Screen{
         player.update(dt);
         for(Enemy enemy : creator.getGoombas()) {
             enemy.update(dt);
-            if(enemy.getX() < player.getX() + 224 / MarioBros.PPM)
+            if(enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
                 enemy.b2body.setActive(true);
+            }
         }
 
         for(Item item : items)
@@ -161,7 +171,9 @@ public class PlayScreen implements Screen{
         hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
-        gamecam.position.x = player.b2body.getPosition().x;
+        if(player.currentState != Mario.State.DEAD) {
+            gamecam.position.x = player.b2body.getPosition().x;
+        }
 
         //update our gamecam with correct coordinates after changes
         gamecam.update();
@@ -169,6 +181,7 @@ public class PlayScreen implements Screen{
         renderer.setView(gamecam);
 
     }
+
 
     @Override
     public void render(float delta) {
@@ -188,9 +201,9 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for(Enemy enemy : creator.getGoombas())
+        for (Enemy enemy : creator.getGoombas())
             enemy.draw(game.batch);
-        for(Item item : items)
+        for (Item item : items)
             item.draw(game.batch);
         game.batch.end();
 
@@ -198,6 +211,18 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
+        if(gameOver()){
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
+
+    }
+
+    public boolean gameOver(){
+        if(player.currentState == Mario.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }
+        return false;
     }
 
     @Override
