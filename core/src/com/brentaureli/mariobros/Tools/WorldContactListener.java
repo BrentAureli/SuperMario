@@ -10,6 +10,7 @@ import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Sprites.Enemies.Enemy;
 import com.brentaureli.mariobros.Sprites.Items.Item;
 import com.brentaureli.mariobros.Sprites.Mario;
+import com.brentaureli.mariobros.Sprites.Other.FireBall;
 import com.brentaureli.mariobros.Sprites.TileObjects.InteractiveTileObject;
 
 /**
@@ -50,8 +51,8 @@ public class WorldContactListener implements ContactListener {
                     ((Mario) fixB.getUserData()).hit((Enemy)fixA.getUserData());
                 break;
             case MarioBros.ENEMY_BIT | MarioBros.ENEMY_BIT:
-                ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
-                ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
+                ((Enemy)fixA.getUserData()).hitByEnemy((Enemy)fixB.getUserData());
+                ((Enemy)fixB.getUserData()).hitByEnemy((Enemy)fixA.getUserData());
                 break;
             case MarioBros.ITEM_BIT | MarioBros.OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == MarioBros.ITEM_BIT)
@@ -65,7 +66,12 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Item)fixB.getUserData()).use((Mario) fixA.getUserData());
                 break;
-
+            case MarioBros.FIREBALL_BIT | MarioBros.OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == MarioBros.FIREBALL_BIT)
+                    ((FireBall)fixA.getUserData()).setToDestroy();
+                else
+                    ((FireBall)fixB.getUserData()).setToDestroy();
+                break;
         }
     }
 
@@ -75,7 +81,6 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
     }
 
     @Override

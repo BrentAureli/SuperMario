@@ -5,35 +5,42 @@ filter: Nearest,Nearest
 repeat: none
 big_mario
   rotate: false
-  xy: 1, 19
+  xy: 1, 29
   size: 336, 32
   orig: 336, 32
   offset: 0, 0
   index: -1
 little_mario
   rotate: false
-  xy: 1, 1
+  xy: 1, 11
   size: 224, 16
   orig: 224, 16
   offset: 0, 0
   index: -1
 turtle
   rotate: false
-  xy: 339, 27
+  xy: 339, 37
   size: 96, 24
   orig: 96, 24
   offset: 0, 0
   index: -1
 goomba
   rotate: false
-  xy: 227, 1
+  xy: 227, 11
   size: 48, 16
   orig: 48, 16
   offset: 0, 0
   index: -1
+fireball
+  rotate: false
+  xy: 1, 1
+  size: 32, 8
+  orig: 32, 8
+  offset: 0, 0
+  index: -1
 mushroom
   rotate: false
-  xy: 437, 35
+  xy: 437, 45
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

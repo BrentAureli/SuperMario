@@ -16,9 +16,9 @@ import com.brentaureli.mariobros.Sprites.Mario;
  * Created by brentaureli on 10/10/15.
  */
 public class Turtle extends Enemy {
-    public static final int KICK_LEFT_SPEED = -2;
-    public static final int KICK_RIGHT_SPEED = 2;
-    public enum State {WALKING, STANDING_SHELL, MOVING_SHELL}
+    public static final int KICK_LEFT = -2;
+    public static final int KICK_RIGHT = 2;
+    public enum State {WALKING, MOVING_SHELL, STANDING_SHELL}
     public State currentState;
     public State previousState;
     private float stateTime;
@@ -73,7 +73,7 @@ public class Turtle extends Enemy {
         head.set(vertice);
 
         fdef.shape = head;
-        fdef.restitution = 1.5f;
+        fdef.restitution = 1.8f;
         fdef.filter.categoryBits = MarioBros.ENEMY_HEAD_BIT;
         b2body.createFixture(fdef).setUserData(this);
     }
@@ -82,8 +82,8 @@ public class Turtle extends Enemy {
         TextureRegion region;
 
         switch (currentState){
-            case STANDING_SHELL:
             case MOVING_SHELL:
+            case STANDING_SHELL:
                 region = shell;
                 break;
             case WALKING:
@@ -111,6 +111,7 @@ public class Turtle extends Enemy {
         if(currentState == State.STANDING_SHELL && stateTime > 5){
             currentState = State.WALKING;
             velocity.x = 1;
+            System.out.println("WAKE UP SHELL");
         }
 
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 8 /MarioBros.PPM);
@@ -119,20 +120,27 @@ public class Turtle extends Enemy {
 
     @Override
     public void hitOnHead(Mario mario) {
-        if(currentState != State.STANDING_SHELL){
+        if(currentState == State.STANDING_SHELL) {
+            if(mario.b2body.getPosition().x > b2body.getPosition().x)
+                velocity.x = -2;
+            else
+                velocity.x = 2;
+            currentState = State.MOVING_SHELL;
+            System.out.println("Set to moving shell");
+        }
+        else {
             currentState = State.STANDING_SHELL;
             velocity.x = 0;
-        } else {
-            kick(mario.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
         }
     }
 
-    public void kick(int speed){
-        velocity.x = speed;
-        currentState = State.MOVING_SHELL;
+    @Override
+    public void hitByEnemy(Enemy enemy) {
+        reverseVelocity(true, false);
     }
 
-    public State getCurrentState(){
-        return currentState;
+    public void kick(int direction){
+        velocity.x = direction;
+        currentState = State.MOVING_SHELL;
     }
 }

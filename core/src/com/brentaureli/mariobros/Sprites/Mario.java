@@ -3,6 +3,7 @@ package com.brentaureli.mariobros.Sprites;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -17,8 +18,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.brentaureli.mariobros.MarioBros;
 import com.brentaureli.mariobros.Screens.PlayScreen;
-import com.brentaureli.mariobros.Sprites.Enemies.Enemy;
-import com.brentaureli.mariobros.Sprites.Enemies.Turtle;
+import com.brentaureli.mariobros.Sprites.Other.FireBall;
+import com.brentaureli.mariobros.Sprites.Enemies.*;
 
 /**
  * Created by brentaureli on 8/27/15.
@@ -47,10 +48,13 @@ public class Mario extends Sprite {
     private boolean timeToDefineBigMario;
     private boolean timeToRedefineMario;
     private boolean marioIsDead;
+    private PlayScreen screen;
 
+    private Array<FireBall> fireballs;
 
     public Mario(PlayScreen screen){
         //initialize default values
+        this.screen = screen;
         this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -98,6 +102,8 @@ public class Mario extends Sprite {
         setBounds(0, 0, 16 / MarioBros.PPM, 16 / MarioBros.PPM);
         setRegion(marioStand);
 
+        fireballs = new Array<FireBall>();
+
     }
 
     public void update(float dt){
@@ -112,6 +118,12 @@ public class Mario extends Sprite {
             defineBigMario();
         if(timeToRedefineMario)
             redefineMario();
+
+        for(FireBall  ball : fireballs) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                fireballs.removeValue(ball, true);
+        }
 
     }
 
@@ -174,7 +186,7 @@ public class Mario extends Sprite {
             return State.DEAD;
         else if(runGrowAnimation)
             return State.GROWING;
-        else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        else if((b2body.getLinearVelocity().y > 0 && currentState == State.JUMPING) || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
         //if negative in Y-Axis mario is falling
         else if(b2body.getLinearVelocity().y < 0)
@@ -207,10 +219,15 @@ public class Mario extends Sprite {
         return marioIsBig;
     }
 
+    public void jump(){
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+        currentState = State.JUMPING;
+    }
+
     public void hit(Enemy enemy){
-        if(enemy instanceof Turtle && ((Turtle) enemy).getCurrentState() == Turtle.State.STANDING_SHELL){
-            ((Turtle) enemy).kick(this.getX() <= enemy.getX() ? Turtle.KICK_RIGHT_SPEED : Turtle.KICK_LEFT_SPEED);
-        } else {
+        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.STANDING_SHELL)
+            ((Turtle) enemy).kick(enemy.b2body.getPosition().x > b2body.getPosition().x ? Turtle.KICK_RIGHT : Turtle.KICK_LEFT);
+        else {
             if (marioIsBig) {
                 marioIsBig = false;
                 timeToRedefineMario = true;
@@ -227,7 +244,6 @@ public class Mario extends Sprite {
                 b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
             }
         }
-
     }
 
     public void redefineMario(){
@@ -332,4 +348,13 @@ public class Mario extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    public void fire(){
+        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight ? true : false));
+    }
+
+    public void draw(Batch batch){
+        super.draw(batch);
+        for(FireBall ball : fireballs)
+            ball.draw(batch);
+    }
 }

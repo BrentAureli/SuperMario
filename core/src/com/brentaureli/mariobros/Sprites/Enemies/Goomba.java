@@ -24,6 +24,7 @@ public class Goomba extends com.brentaureli.mariobros.Sprites.Enemies.Enemy
     private Array<TextureRegion> frames;
     private boolean setToDestroy;
     private boolean destroyed;
+    float angle;
 
 
     public Goomba(PlayScreen screen, float x, float y) {
@@ -36,6 +37,7 @@ public class Goomba extends com.brentaureli.mariobros.Sprites.Enemies.Enemy
         setBounds(getX(), getY(), 16 / MarioBros.PPM, 16 / MarioBros.PPM);
         setToDestroy = false;
         destroyed = false;
+        angle = 0;
     }
 
     public void update(float dt){
@@ -96,9 +98,18 @@ public class Goomba extends com.brentaureli.mariobros.Sprites.Enemies.Enemy
     }
 
 
+
     @Override
     public void hitOnHead(Mario mario) {
         setToDestroy = true;
         MarioBros.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+    }
+
+    @Override
+    public void hitByEnemy(Enemy enemy) {
+        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL)
+            setToDestroy = true;
+        else
+            reverseVelocity(true, false);
     }
 }

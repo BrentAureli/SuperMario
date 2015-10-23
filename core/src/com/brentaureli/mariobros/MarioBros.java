@@ -26,6 +26,7 @@ public class MarioBros extends Game {
 	public static final short ENEMY_HEAD_BIT = 128;
 	public static final short ITEM_BIT = 256;
 	public static final short MARIO_HEAD_BIT = 512;
+	public static final short FIREBALL_BIT = 1024;
 
 	public SpriteBatch batch;
 
