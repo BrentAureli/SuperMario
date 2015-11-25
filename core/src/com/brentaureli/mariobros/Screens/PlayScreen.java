@@ -259,4 +259,5 @@ public class PlayScreen implements Screen{
         hud.dispose();
     }
 
+    public Hud getHud(){ return hud; }
 }
