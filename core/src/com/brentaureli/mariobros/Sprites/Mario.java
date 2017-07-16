@@ -116,6 +116,10 @@ public class Mario extends Sprite {
             die();
         }
 
+        // When falling in a pit, Mario should die.
+        if (b2body.getPosition().y < 0 && !marioIsDead)
+            hit(null);
+        
         //update our sprite to correspond with the position of our Box2D body
         if(marioIsBig)
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / MarioBros.PPM);
