@@ -155,7 +155,7 @@ public class PlayScreen implements Screen{
         player.update(dt);
         for(Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
-            if(enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
+            if(enemy.getX() < gamecam.position.x + 224 / MarioBros.PPM) {
                 enemy.b2body.setActive(true);
             }
         }
@@ -166,8 +166,15 @@ public class PlayScreen implements Screen{
         hud.update(dt);
 
         //attach our gamecam to our players.x coordinate
-        if(player.currentState != Mario.State.DEAD) {
-            gamecam.position.x = player.b2body.getPosition().x;
+        if (player.currentState != Mario.State.DEAD) {
+            // move camera only forward
+            if (gamecam.position.x < player.b2body.getPosition().x) {
+                gamecam.position.x = player.b2body.getPosition().x;
+            // stop mario when he is running out of the screen
+            } else if (player.b2body.getPosition().x - player.b2body.getFixtureList().get(0).getShape().getRadius() <= gamecam.position.x - gamecam.viewportWidth / 2) {
+                player.b2body.setLinearVelocity(0, player.b2body.getLinearVelocity().y);
+                player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getLocalCenter(), true);
+            }
         }
 
         //update our gamecam with correct coordinates after changes
