@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -26,7 +27,6 @@ import com.brentaureli.mariobros.Sprites.Mario;
 import com.brentaureli.mariobros.Tools.B2WorldCreator;
 import com.brentaureli.mariobros.Tools.WorldContactListener;
 
-import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
@@ -60,6 +60,16 @@ public class PlayScreen implements Screen{
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
 
+   /* protected void world()
+    {
+        boolean gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
+        if (gyroscopeAvail) {
+            float GyroxF = Gdx.input.getAccelerometerX();
+            int gyroX = MathUtils.round(-GyroxF);
+            world = new World(new Vector2(gyroX, -10), false);
+        }
+    }*/
+
     public PlayScreen(MarioBros game){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
@@ -81,8 +91,11 @@ public class PlayScreen implements Screen{
         //initially set our gamcam to be centered correctly at the start of of map
         //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
             gamecam.position.set(10000, 1,100);
+
+        world = new World(new Vector2(0, -10), false);
+
         //create our Box2D world, setting no gravity in X, -10 gravity in Y, and allow bodies to sleep
-        world = new World(new Vector2(0, -10), true);
+
         //allows for debug lines of our box2d world.
         b2dr = new Box2DDebugRenderer();
 
@@ -128,6 +141,7 @@ public class PlayScreen implements Screen{
     }
 
     public void handleInput(float dt){
+
         //control our player using immediate impulses
         if(player.currentState != Mario.State.DEAD) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
@@ -143,6 +157,7 @@ public class PlayScreen implements Screen{
     }
 
     public void update(float dt){
+
         //handle user input first
         handleInput(dt);
         handleSpawningItems();

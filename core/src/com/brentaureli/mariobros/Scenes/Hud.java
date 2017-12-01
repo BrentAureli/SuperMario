@@ -1,6 +1,6 @@
 package com.brentaureli.mariobros.Scenes;
 
-import com.apple.eawt.event.PressureEvent;
+//import com.apple.eawt.event.PressureEvent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,7 +39,7 @@ public class Hud implements Disposable{
     private Label levelLabel;
     private Label worldLabel;
     private Label marioLabel;
-    private Button tb;
+    //private Button tb;
     public Hud(SpriteBatch sb){
         //define our tracking variables
         worldTimer = 300;
@@ -67,7 +67,7 @@ public class Hud implements Disposable{
         worldLabel = new Label("WORLD", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         marioLabel = new Label("MARIO", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //Drawable True = ;
-        right = new TextButton("Right", new TextButton.TextButtonStyle(new TextButton.TextButtonStyle() ));
+        //right = new TextButton("Right", new TextButton.TextButtonStyle(new TextButton.TextButtonStyle() ));
 
         //add our labels to our table, padding the top, and giving them all equal width with expandX
         table.add(marioLabel).expandX().padTop(10);
@@ -78,8 +78,8 @@ public class Hud implements Disposable{
         table.add(scoreLabel).expandX();
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
-        table.row();
-        table.add(right).expandX();
+       // table.row();
+       // table.add(right).expandX();
 
         //add our table to the stage
         stage.addActor(table);
