@@ -144,13 +144,14 @@ public class PlayScreen implements Screen{
 
         //control our player using immediate impulses
         if(player.currentState != Mario.State.DEAD) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            if (Gdx.input.isKeyPressed(Input.Keys.BUTTON_A))
                 player.jump();
+              //  player.b2body.applyLinearImpulse(new Vector2(0, 40f), player.b2body.getWorldCenter(), true);
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
                 player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
                 player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_R1))
                 player.fire();
         }
 
