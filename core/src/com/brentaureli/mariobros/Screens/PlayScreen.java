@@ -29,9 +29,7 @@ import com.brentaureli.mariobros.Tools.WorldContactListener;
 import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/**
- * Created by brentaureli on 8/14/15.
- */
+
 public class PlayScreen implements Screen{
     //Reference to our Game, used to set Screens
     private MarioBros game;
@@ -81,8 +79,8 @@ public class PlayScreen implements Screen{
         renderer = new OrthogonalTiledMapRenderer(map, 1  / MarioBros.PPM);
 
         //initially set our gamcam to be centered correctly at the start of of map
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-
+        //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+            gamecam.position.set(10000, 1,100);
         //create our Box2D world, setting no gravity in X, -10 gravity in Y, and allow bodies to sleep
         world = new World(new Vector2(0, -10), true);
         //allows for debug lines of our box2d world.
