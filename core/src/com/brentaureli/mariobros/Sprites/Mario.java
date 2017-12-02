@@ -65,7 +65,7 @@ public class Mario extends Sprite {
 
         //get run animation frames and add them to marioRun Animation
         for(int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("little_mario"), i * 16, 0, 16, 16));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("little_mario"), (i * 16)+4, 0, 16, 16));
         marioRun = new Animation(0.1f, frames);
 
         frames.clear();
@@ -89,7 +89,7 @@ public class Mario extends Sprite {
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
 
         //create texture region for mario standing
-        marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
+        marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 20, 20);
         bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
 
         //create dead mario texture region
@@ -232,7 +232,7 @@ public class Mario extends Sprite {
                 fixture.setFilterData(filter);
             }
 
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 8f), b2body.getWorldCenter(), true);
         }
     }
 
@@ -250,7 +250,7 @@ public class Mario extends Sprite {
 
     public void jump(){
         if ( currentState != State.JUMPING ) {
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
 
               currentState = State.JUMPING;
         }
