@@ -119,7 +119,7 @@
  </layer>
  <layer name="Graphic Layer" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJztmEsOgjAURQszFTXqiClDP5g4dGcuRB27CXV5PhOaVKT09aNYuSe5sQl90tYePgoBAAAA/Bd50vUIAACu7Ct/j6kQJ8o57XY8AAA+0t8reXuj3Hvkb971AL5Iaoiur88a2dbqxiOP5VX6sEWLKib2eH4G4KcoBPwFIEYKAX8BiJG6uz7+Zkpip/4eJt+l1M9PMKC1HTKvjzZ9uYSYn65W956aM9qc77c5p6TQtE3UXbGplaj/F7isd5O7Pv6OKRPK1GEsKp/Yl7/AJTXPbUnHVsy52/QF7zQ5yNn/Ta5wa0Ohc9fV3+c9d6PE5x4c477kXnNMc4O/36HNwTYHdK6Yan3vSWp9m7uu/k6qlEpbMmeOe0T9Mso4wn3JdQn+dg/HwSYP2lwx1fr+VrLe5C73+aGOdHartA90vhllR1kwxr6mPhtKGWBfJshbQq0N1jn8miKveQDdiR1Q
+   eJztmEsOgyAQQNFNa2/gll3tqXvT0lQTo3wGRCn6XjIpCUzFoS86VQoAAAAAAAAAUulLb+BA2kC41m6pUWyuaz/TXD+Gbf5s6DEAoC60wt/S3EzcTXSlNwJVoRX+/gtPE0PpTUA1LN3F3x/LPqydfe7ZT3WNUo8m/1opOe7PlevqU3vBWPL9Mdec0I5xiKUrKd7M/y9IqbfNXfzdj3cbdm4wcy+hkzFrYY3NQcnv3+bK0e643L2av7l6TumzMOQc/qYRe44+B30OuFwJ5W59V5rn+9y9mr9fcvScUpfwdz+k5yhx0OaBz5VQ7tazmvJD7p7F34ZYRa7aUOf8Na0pjuADRlUUCA==
   </data>
  </layer>
  <objectgroup name="Ground">
@@ -166,11 +166,6 @@
  </objectgroup>
  <objectgroup name="Coins">
   <object id="70" x="256" y="128" width="16" height="16"/>
-  <object id="71" x="336" y="128" width="16" height="16">
-   <properties>
-    <property name="mushroom" value=""/>
-   </properties>
-  </object>
   <object id="72" x="352" y="64" width="16" height="16"/>
   <object id="73" x="368" y="128" width="16" height="16"/>
   <object id="74" x="1264" y="128" width="16" height="16"/>
@@ -223,11 +218,8 @@
   <object id="119" x="1904" y="128" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Goombas">
-  <object id="139" x="512" y="176" width="16" height="16"/>
-  <object id="140" x="672" y="176" width="16" height="16"/>
   <object id="141" x="832" y="176" width="16" height="16"/>
   <object id="142" x="2768" y="176" width="16" height="16"/>
-  <object id="143" x="560" y="176" width="16" height="16"/>
   <object id="148" x="1920" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Turtles">

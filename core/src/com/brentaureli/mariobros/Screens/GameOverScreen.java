@@ -57,7 +57,7 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if(Gdx.input.isKeyPressed(Input.Keys.BUTTON_X)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.BUTTON_X) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             game.setScreen(new PlayScreen((MarioBros) game));
             dispose();
         }
