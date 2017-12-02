@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.brentaureli.mariobros.android"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.ppp.dltty.android"
+    android:versionCode="3"
+    android:versionName="1.1" >
 
-    <uses-sdk android:minSdkVersion="25" android:targetSdkVersion="25" />
+    <uses-sdk android:minSdkVersion="20" android:targetSdkVersion="26" />
 
     <application
         android:allowBackup="true"
